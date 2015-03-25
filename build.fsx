@@ -48,6 +48,7 @@ let additionalFiles = [
 Target "Clean" (fun _ -> CleanDirs [buildDir; testDir; docsDir; apidocsDir; nugetDir; reportDir])
 
 open Fake.AssemblyInfoFile
+open Fake.XUnit2Helper
 
 Target "SetAssemblyInfo" (fun _ ->
     let common = [
@@ -140,7 +141,7 @@ Target "Test" (fun _ ->
 
     !! (testDir @@ "Test.*.dll")
       ++ (testDir @@ "FsCheck.Fake.dll")
-    |>  xUnit (fun p -> p)
+    |>  xUnit2 id
 )
 
 Target "Bootstrap" (fun _ ->

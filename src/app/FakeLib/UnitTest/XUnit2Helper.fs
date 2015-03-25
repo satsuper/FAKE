@@ -1,4 +1,4 @@
-﻿/// Contains tasks to run [xUnit](https://github.com/xunit/xunit) unit tests.
+﻿/// Contains tasks to run [xUnit](http://xunit.github.io/) unit tests.
 module Fake.XUnit2Helper
 
 open System

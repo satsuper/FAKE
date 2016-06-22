@@ -91,6 +91,25 @@ type CollectionConcurrencyMode =
         | Unlimited -> Some 0
         | MaxThreads count -> Some count
 
+/// The progress reporter used by the xUnit2 runner.
+type Reporters =
+    /// Show the default progress messages
+    | Default
+    /// Forces AppVeyor CI mode (normally auto-detected)
+    | AppVeyor
+    /// Do not show progress messages
+    | Quiet
+    /// Forces TeamCity mode (normally auto-detected)
+    | TeamCity
+    /// Show verbose progress messages
+    | Verbose
+    static member internal ToArgument = function
+        | Default -> None
+        | AppVeyor -> Some "appveyor"
+        | Quiet -> Some "quiet"
+        | TeamCity -> Some "teamcity"
+        | Verbose -> Some "verbose"
+
 /// The xUnit2 parameter type.
 type XUnit2Params =
     { /// The path to the xUnit console runner: `xunit.console.exe`
@@ -113,8 +132,8 @@ type XUnit2Params =
       WorkingDir : string option
       /// Run xUnit with shadow copy enabled.
       ShadowCopy : bool
-      /// Run xUnit without reporting test progress.
-      Silent : bool
+      /// The xUnit progress reporter.
+      Reporter : Reporters
       /// Maximum time to allow xUnit to run before being killed.
       TimeOut : TimeSpan
       /// Test runner error level.
@@ -123,10 +142,6 @@ type XUnit2Params =
       IncludeTraits : (string * string) list
       /// List of traits to exclude.
       ExcludeTraits : (string * string) list
-      /// Forces TeamCity mode (normally auto-detected).
-      ForceTeamCity : bool
-      /// Forces AppVeyor CI mode (normally auto-detected).
-      ForceAppVeyor : bool
       /// Waits for input after completion.
       Wait : bool
       /// Run xUnit against a specific namespace
@@ -154,9 +169,7 @@ type XUnit2Params =
 /// - `ToolPath` - The `xunit.console.exe` path if it exists in a subdirectory of the current directory.
 /// - `WorkingDir` - `None`
 /// - `TimeOut` - 5 minutes
-/// - `ForceTeamCity` - `false`
-/// - `ForceAppVeyor` - `false`
-/// - `Silent` - `false`
+/// - `Reporter` - `Default`
 /// - `Wait` - `false`
 /// - `Namespace` - `None`
 /// - `Class` - `None`
@@ -164,7 +177,7 @@ type XUnit2Params =
 let XUnit2Defaults =
     { NoAppDomain = false
       Parallel = NoParallelization
-      MaxThreads = Default
+      MaxThreads = CollectionConcurrencyMode.Default
       HtmlOutputPath = None
       XmlOutputPath = None
       XmlV1OutputPath = None
@@ -176,9 +189,7 @@ let XUnit2Defaults =
       ToolPath = findToolInSubPath "xunit.console.exe" (currentDirectory @@ "tools" @@ "xUnit")
       WorkingDir = None
       TimeOut = TimeSpan.FromMinutes 5.
-      ForceTeamCity = false
-      ForceAppVeyor = false
-      Silent = false
+      Reporter = Reporters.Default
       Wait = false
       Namespace = None
       Class = None
@@ -198,10 +209,8 @@ let buildXUnit2Args assemblies parameters =
     |> appendWithoutQuotes (ParallelMode.ToArgument parameters.Parallel)
     |> appendIfSome (CollectionConcurrencyMode.ToArgument parameters.MaxThreads) (sprintf "-maxthreads %d")
     |> appendIfTrueWithoutQuotes (not parameters.ShadowCopy) "-noshadow"
-    |> appendIfTrueWithoutQuotes parameters.ForceTeamCity "-teamcity"
-    |> appendIfTrueWithoutQuotes parameters.ForceAppVeyor "-appveyor"
     |> appendIfTrueWithoutQuotes parameters.Wait "-wait"
-    |> appendIfTrueWithoutQuotes parameters.Silent "-silent"
+    |> appendIfSome (Reporters.ToArgument parameters.Reporter) (sprintf "-%s")
     |> appendIfSome parameters.XmlOutputPath (sprintf @"-xml ""%s""")
     |> appendIfSome parameters.XmlV1OutputPath (sprintf @"-xmlv1 ""%s""")
     |> appendIfSome parameters.NUnitXmlOutputPath (sprintf @"-nunit ""%s""")

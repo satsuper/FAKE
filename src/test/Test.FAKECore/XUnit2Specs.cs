@@ -59,11 +59,14 @@ namespace Test.FAKECore.XUnit2Specs
         It should_not_request_no_shadow_copy = () =>
             Arguments.ShouldNotContain(" -noshadow");
 
-        It should_not_request_silence = () =>
-            Arguments.ShouldNotContain(" -silent");
-
         It should_not_request_wait = () =>
             Arguments.ShouldNotContain(" -wait");
+
+        It should_not_request_quiet = () =>
+            Arguments.ShouldNotContain(" -quiet");
+
+        It should_not_request_verbose = () =>
+            Arguments.ShouldNotContain(" -verbose");
 
         It should_not_force_TeamCity_output = () =>
             Arguments.ShouldNotContain(" -teamcity");
@@ -91,13 +94,11 @@ namespace Test.FAKECore.XUnit2Specs
                 XUnit2.XUnit2Defaults.NUnitXmlOutputPath,
                 XUnit2.XUnit2Defaults.WorkingDir,
                 XUnit2.XUnit2Defaults.ShadowCopy,
-                XUnit2.XUnit2Defaults.Silent,
+                XUnit2.XUnit2Defaults.Reporter,
                 XUnit2.XUnit2Defaults.TimeOut,
                 XUnit2.XUnit2Defaults.ErrorLevel,
                 Util.Traits(Util.Trait("name", "value1"), Util.Trait("name2", "value2")),
                 Util.Traits(Util.Trait("name", "value3")),
-                XUnit2.XUnit2Defaults.ForceTeamCity,
-                XUnit2.XUnit2Defaults.ForceAppVeyor,
                 XUnit2.XUnit2Defaults.Wait,
                 XUnit2.XUnit2Defaults.Namespace,
                 XUnit2.XUnit2Defaults.Class,
@@ -130,13 +131,11 @@ namespace Test.FAKECore.XUnit2Specs
                 FSharpOption<string>.Some("nunit.xml"),
                 XUnit2.XUnit2Defaults.WorkingDir,
                 XUnit2.XUnit2Defaults.ShadowCopy,
-                XUnit2.XUnit2Defaults.Silent,
+                XUnit2.XUnit2Defaults.Reporter,
                 XUnit2.XUnit2Defaults.TimeOut,
                 XUnit2.XUnit2Defaults.ErrorLevel,
                 XUnit2.XUnit2Defaults.IncludeTraits,
                 XUnit2.XUnit2Defaults.ExcludeTraits,
-                XUnit2.XUnit2Defaults.ForceTeamCity,
-                XUnit2.XUnit2Defaults.ForceAppVeyor,
                 XUnit2.XUnit2Defaults.Wait,
                 XUnit2.XUnit2Defaults.Namespace,
                 XUnit2.XUnit2Defaults.Class,
@@ -172,13 +171,11 @@ namespace Test.FAKECore.XUnit2Specs
                 XUnit2.XUnit2Defaults.NUnitXmlOutputPath,
                 XUnit2.XUnit2Defaults.WorkingDir,
                 XUnit2.XUnit2Defaults.ShadowCopy,
-                XUnit2.XUnit2Defaults.Silent,
+                XUnit2.XUnit2Defaults.Reporter,
                 XUnit2.XUnit2Defaults.TimeOut,
                 XUnit2.XUnit2Defaults.ErrorLevel,
                 XUnit2.XUnit2Defaults.IncludeTraits,
                 XUnit2.XUnit2Defaults.ExcludeTraits,
-                XUnit2.XUnit2Defaults.ForceTeamCity,
-                XUnit2.XUnit2Defaults.ForceAppVeyor,
                 XUnit2.XUnit2Defaults.Wait,
                 XUnit2.XUnit2Defaults.Namespace,
                 XUnit2.XUnit2Defaults.Class,
@@ -208,13 +205,11 @@ namespace Test.FAKECore.XUnit2Specs
                 XUnit2.XUnit2Defaults.NUnitXmlOutputPath,
                 XUnit2.XUnit2Defaults.WorkingDir,
                 XUnit2.XUnit2Defaults.ShadowCopy,
-                XUnit2.XUnit2Defaults.Silent,
+                XUnit2.XUnit2Defaults.Reporter,
                 XUnit2.XUnit2Defaults.TimeOut,
                 XUnit2.XUnit2Defaults.ErrorLevel,
                 XUnit2.XUnit2Defaults.IncludeTraits,
                 XUnit2.XUnit2Defaults.ExcludeTraits,
-                XUnit2.XUnit2Defaults.ForceTeamCity,
-                XUnit2.XUnit2Defaults.ForceAppVeyor,
                 XUnit2.XUnit2Defaults.Wait,
                 XUnit2.XUnit2Defaults.Namespace,
                 XUnit2.XUnit2Defaults.Class,
@@ -244,13 +239,11 @@ namespace Test.FAKECore.XUnit2Specs
                 XUnit2.XUnit2Defaults.NUnitXmlOutputPath,
                 XUnit2.XUnit2Defaults.WorkingDir,
                 XUnit2.XUnit2Defaults.ShadowCopy,
-                XUnit2.XUnit2Defaults.Silent,
+                XUnit2.XUnit2Defaults.Reporter,
                 XUnit2.XUnit2Defaults.TimeOut,
                 XUnit2.XUnit2Defaults.ErrorLevel,
                 XUnit2.XUnit2Defaults.IncludeTraits,
                 XUnit2.XUnit2Defaults.ExcludeTraits,
-                XUnit2.XUnit2Defaults.ForceTeamCity,
-                XUnit2.XUnit2Defaults.ForceAppVeyor,
                 XUnit2.XUnit2Defaults.Wait,
                 XUnit2.XUnit2Defaults.Namespace,
                 XUnit2.XUnit2Defaults.Class,
@@ -281,13 +274,11 @@ namespace Test.FAKECore.XUnit2Specs
                 XUnit2.XUnit2Defaults.NUnitXmlOutputPath,
                 XUnit2.XUnit2Defaults.WorkingDir,
                 !XUnit2.XUnit2Defaults.ShadowCopy,
-                !XUnit2.XUnit2Defaults.Silent,
+                XUnit2.XUnit2Defaults.Reporter,
                 XUnit2.XUnit2Defaults.TimeOut,
                 XUnit2.XUnit2Defaults.ErrorLevel,
                 XUnit2.XUnit2Defaults.IncludeTraits,
                 XUnit2.XUnit2Defaults.ExcludeTraits,
-                !XUnit2.XUnit2Defaults.ForceTeamCity,
-                !XUnit2.XUnit2Defaults.ForceAppVeyor,
                 !XUnit2.XUnit2Defaults.Wait,
                 XUnit2.XUnit2Defaults.Namespace,
                 XUnit2.XUnit2Defaults.Class,
@@ -297,17 +288,8 @@ namespace Test.FAKECore.XUnit2Specs
         It should_request_no_shadow_copy = () =>
             Arguments.ShouldContain(" -noshadow");
 
-        It should_request_silence = () =>
-            Arguments.ShouldContain(" -silent");
-
         It should_request_wait = () =>
             Arguments.ShouldContain(" -wait");
-
-        It should_force_TeamCity_output = () =>
-            Arguments.ShouldContain(" -teamcity");
-
-        It should_force_AppVeyor_output = () =>
-            Arguments.ShouldContain(" -appveyor");
 
         It should_force_NoAppDomain = () =>
             Arguments.ShouldContain(" -noappdomain");
